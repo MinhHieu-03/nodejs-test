@@ -1,0 +1,51 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <form method="POST" action="/courses/update/{{course.slug}}?_method=PUT">
+        <h1>Chỉnh sửa khóa học</h1>
+
+        <div class="form-group">
+          <label for="name">Tên khóa học</label>
+          <input
+            type="text"
+            class="form-control"
+            name="name"
+            value="{{course.name}}"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Mô tả</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            value="{{course.description}}"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="videoid">VideoID</label>
+          <input
+            type="text"
+            class="form-control"
+            name="videoid"
+            value="{{course.videoid}}"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="image">Hình ảnh</label>
+          <input
+            type="text"
+            class="form-control"
+            name="image"
+            value="{{course.image}}"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Cập nhật</button>
+      </form>
+    </div>
+  </div>
+</div>
