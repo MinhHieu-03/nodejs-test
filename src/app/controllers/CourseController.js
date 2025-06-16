@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 const Course = require("../../models/Course");
 const slugify = require("slugify");
 
@@ -11,15 +13,35 @@ class CourseController {
       .catch(next);
   }
 
-  show(req, res, next) {
-    Course.findOne({ slug: req.params.slug })
-      .lean()
-      .then((course) => {
-        if (!course) return res.status(404).send("Không tìm thấy khóa học");
-        res.render("courses/show", { course });
-      })
-      .catch(next); // ❗ tốt hơn: dùng next để Express xử lý lỗi
+  async show(req, res, next) {
+    try {
+      const course = await Course.findOne({ slug: req.params.slug });
+      if (!course) return res.status(404).send("Không tìm thấy khóa học");
+
+      // Tăng views tổng
+      course.views = (course.views || 0) + 1;
+
+      // Tăng views theo tháng
+      const nowMonth = moment().format('YYYY-MM');
+      let found = false;
+      if (!course.viewHistory) course.viewHistory = [];
+      course.viewHistory.forEach(item => {
+        if (moment(item.date).format('YYYY-MM') === nowMonth) {
+          item.count += 1;
+          found = true;
+        }
+      });
+      if (!found) {
+        course.viewHistory.push({ date: new Date(), count: 1 });
+      }
+
+      await course.save();
+      res.render("courses/show", { course: course.toObject() });
+    } catch (err) {
+      next(err);
+    }
   }
+
 
   create(req, res, next) {
     res.render("courses/create");

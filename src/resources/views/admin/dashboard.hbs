@@ -1,0 +1,33 @@
+<h1 class="text-center">Thống kê lượt xem khóa học theo tháng</h1>
+<canvas id="myChart" style="width:100%; max-width:70%"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script>
+  const xValues = {{{months}}};
+  const courses = {{{coursesJson}}};
+
+  // Tạo datasets cho từng khóa học
+  const datasets = courses.map((course, idx) => ({
+    label: course.name,
+    backgroundColor: `hsl(${idx * 60}, 70%, 60%)`,
+    data: course.monthlyViews
+  }));
+
+  new Chart("myChart", {
+    type: "bar",
+    data: {
+      labels: xValues,
+      datasets: datasets
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: { beginAtZero: true }
+        }]
+      },
+      title: {
+        display: true,
+        text: "Lượt xem các khóa học theo tháng"
+      }
+    }
+  });
+</script>
